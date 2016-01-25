@@ -9,14 +9,15 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="#3969f9">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Scan"
         android:id="@+id/buttonScan"
-        android:layout_alignTop="@+id/wifibutton"
+        android:layout_below="@+id/textView2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -26,16 +27,37 @@
         android:text="Wifi On"
         android:id="@+id/wifibutton"
         android:checked="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignTop="@+id/scrollView"
+        android:layout_alignRight="@+id/buttonScan"
+        android:layout_alignEnd="@+id/buttonScan"
+        android:layout_marginTop="69dp" />
 
-    <ListView
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/scrollView"
+        android:layout_toLeftOf="@+id/wifibutton"
+        android:layout_below="@+id/buttonScan"
+        android:layout_alignLeft="@+id/wifibutton"
+        android:layout_alignStart="@+id/wifibutton" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/textView"
+            android:gravity="center|fill" />
+    </ScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="To scan wifi connection and find out which one is the strongest click &quot;scan&quot; button"
+        android:id="@+id/textView2"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/buttonScan" />
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
