@@ -17,9 +17,9 @@
         android:layout_height="wrap_content"
         android:text="Scan"
         android:id="@+id/buttonScan"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Switch
         android:layout_width="wrap_content"
@@ -49,31 +49,33 @@
             android:gravity="center|fill" />
     </ScrollView>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="To scan wifi connection and find out which one is the strongest click &quot;scan&quot; button"
-        android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/strong"
+        android:text="Get Strongets Wifi"
+        android:id="@+id/Strongest"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Strongest"
+        android:id="@+id/strong"
+        android:layout_alignTop="@+id/Strongest"
+        android:layout_toLeftOf="@+id/buttonScan"
+        android:layout_toStartOf="@+id/buttonScan" />
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/wifis"
+        android:id="@+id/Wifi_listview"
+        android:layout_toRightOf="@+id/scrollView"
+        android:layout_toEndOf="@+id/scrollView"
         android:layout_below="@+id/buttonScan"
-        android:layout_above="@+id/strong" />
+        android:layout_above="@+id/Strongest" />
 
 </RelativeLayout>

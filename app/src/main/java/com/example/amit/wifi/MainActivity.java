@@ -21,43 +21,52 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     //region CONSTANTS
-
-    private static final String TAG = "wifi";
     TextView text ;
     Button scan;
     WifiManager wifi;
     TextView strong;
     BroadcastReceiver receiver;
-    ListView wifis;
+    ListView wifi_listview;
     WifiInfo info;
+    TextView wifi_one;
+    TextView wifi_two;
+    TextView wifi_three;
+    Button strongest;
     //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
+
+        //region set all the widget
         scan = (Button) findViewById(R.id.buttonScan);
         text = (TextView) findViewById(R.id.textView);
         strong = (TextView) findViewById(R.id.strong);
-        wifis = (ListView) findViewById(R.id.wifis);
+        strongest = (Button) findViewById(R.id.Strongest);
+        wifi_listview = (ListView)findViewById(R.id.Wifi_listview);
         final Switch wifiSwich = (Switch) findViewById(R.id.wifibutton);
-        info = wifi.getConnectionInfo();
-        text.append("\n\n wifi :" + info.toString());
+        //endregion
+
+        //region set the wifi service , get connection info and configurations
         scan.setOnClickListener(this);
         wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-
+        info = wifi.getConnectionInfo();
+        text.append("\n\n wifi :" + info.toString());
         List<WifiConfiguration> configurations = wifi.getConfiguredNetworks();
         for (WifiConfiguration configuration : configurations) {
             text.append("\n\n" + configuration.toString());
         }
+        //endregion
 
+        //region register reciver and activate WifiScaner
         if (receiver == null)
             receiver = new WifiScaner(this);
         registerReceiver(receiver, new IntentFilter(
                 WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-        Log.d(TAG, "onCreate");
+        //endregion
 
-    //region  WIFI SWITCH
+        //region  WIFI SWITCH
         if(wifi.isWifiEnabled() == true)
             wifiSwich.setChecked(true);
         else
@@ -76,19 +85,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         //endregion
+
     }
 
     @Override
+    //signout fron reviver when app is off
     protected void onStop() {
         unregisterReceiver(receiver);
         super.onStop();
     }
 
     @Override
+    //start scan when clicking
     public void onClick(View v) {
         Toast.makeText(getApplicationContext(),"Scan Wifi",0).show();
         if (v.getId()== R.id.buttonScan){
-            Log.d(TAG,"onCreate() wifi.Startscan");
             wifi.startScan();
         }
     }

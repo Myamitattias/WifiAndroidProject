@@ -1,0 +1,6 @@
+<root>
+  <item name='android.R.layout simple_list_item_1'>
+    <annotation name='java.lang.annotation.Deprecated' />
+    <annotation name='android.support.annotation.NonNull' />
+  </item>
+</root>
