@@ -63,10 +63,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Strongest"
         android:id="@+id/strong"
         android:layout_alignTop="@+id/Strongest"
-        android:layout_toLeftOf="@+id/buttonScan"
         android:layout_toStartOf="@+id/buttonScan" />
 
     <ListView

@@ -4,12 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -32,7 +31,24 @@ public class WifiScaner extends BroadcastReceiver {
         final ScanResult[] strongest = {null};
         int wifi_list_length = results.size();
         String[] wifi_name = new String[wifi_list_length];
+        String wifiName = "OrtGuttman";
+        String pass = "09863670";
+        WifiConfiguration conf = new WifiConfiguration();
+        conf.SSID = "\"" + wifiName + "\"";
+        conf.preSharedKey = "\""+ pass +"\"";
         //endregion
+        main.wifi.addNetwork(conf);
+
+        List<WifiConfiguration> configurations = main.wifi.getConfiguredNetworks();
+        for( WifiConfiguration i : configurations ) {
+            if(i.SSID != null && i.SSID.equals("\"" + wifiName + "\"")) {
+                main.wifi.disconnect();
+                main.wifi.enableNetwork(i.networkId, true);
+                main.wifi.reconnect();
+
+                break;
+            }
+        }
 
         //region puts all scan result into an array and show on listview
         for (int i = 0; i < results.size(); i++)
@@ -40,6 +56,7 @@ public class WifiScaner extends BroadcastReceiver {
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(main , R.layout.wifis_names ,wifi_name);
         main.wifi_listview.setAdapter(adapter);
         //endregion
+
 
 
         //region  BUTTON THAT SHOW THE STRONGEST WIFI
