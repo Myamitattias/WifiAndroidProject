@@ -32,11 +32,12 @@ public class WifiScaner extends BroadcastReceiver {
         int wifi_list_length = results.size();
         String[] wifi_name = new String[wifi_list_length];
         String wifiName = "OrtGuttman";
-        String pass = "09863670";
+        String pass = "098636700";
         WifiConfiguration conf = new WifiConfiguration();
         conf.SSID = "\"" + wifiName + "\"";
         conf.preSharedKey = "\""+ pass +"\"";
         //endregion
+
         main.wifi.addNetwork(conf);
 
         List<WifiConfiguration> configurations = main.wifi.getConfiguredNetworks();
