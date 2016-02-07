@@ -3,9 +3,10 @@ package com.example.amit.wifi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Button;
 import android.view.View;
 import android.net.wifi.*;
@@ -28,10 +29,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     BroadcastReceiver receiver;
     ListView wifi_listview;
     WifiInfo info;
-    TextView wifi_one;
-    TextView wifi_two;
-    TextView wifi_three;
     Button strongest;
+    TextView firstmassege;
+    ConnectivityManager isconnected;
     //endregion
 
     @Override
@@ -45,25 +45,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         strong = (TextView) findViewById(R.id.strong);
         strongest = (Button) findViewById(R.id.Strongest);
         wifi_listview = (ListView)findViewById(R.id.Wifi_listview);
+        firstmassege = (TextView) findViewById(R.id.firstmassage);
         final Switch wifiSwich = (Switch) findViewById(R.id.wifibutton);
+        isconnected = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+
         //endregion
 
         //region set the wifi service , get connection info and configurations
         scan.setOnClickListener(this);
         wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         info = wifi.getConnectionInfo();
+
         text.append("\n\n wifi :" + info.toString());
         List<WifiConfiguration> configurations = wifi.getConfiguredNetworks();
         for (WifiConfiguration configuration : configurations) {
             text.append("\n\n" + configuration.toString());
         }
-        //endregion
-
-        //region register reciver and activate WifiScaner
-        if (receiver == null)
-            receiver = new WifiScaner(this);
-        registerReceiver(receiver, new IntentFilter(
-                WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         //endregion
 
         //region  WIFI SWITCH
@@ -86,6 +83,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         //endregion
 
+        //region register reciver and activate WifiScaner
+        if (receiver == null)
+            receiver = new WifiScaner(this);
+        registerReceiver(receiver, new IntentFilter(
+                WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        //endregion
+
+
+
     }
 
     @Override
@@ -103,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             wifi.startScan();
         }
     }
+
 
 }
 

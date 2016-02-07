@@ -63,21 +63,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Wifi_listview"
-        android:layout_toRightOf="@+id/scrollView"
-        android:layout_toEndOf="@+id/scrollView"
+        android:visibility="visible"
         android:layout_below="@+id/buttonScan"
-        android:layout_above="@+id/Strongest" />
+        android:layout_toRightOf="@+id/scrollView"
+        android:layout_toEndOf="@+id/scrollView" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
         android:id="@+id/strong"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/Strongest"
         android:layout_toEndOf="@+id/Strongest"
         android:layout_marginLeft="40dp"
         android:layout_marginStart="40dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="To see the available wifi , click the scen button"
+        android:id="@+id/firstmassage"
+        android:layout_below="@+id/buttonScan"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
