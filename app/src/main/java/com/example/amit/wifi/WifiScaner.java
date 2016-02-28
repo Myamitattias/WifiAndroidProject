@@ -44,7 +44,8 @@ public class WifiScaner extends BroadcastReceiver {
         final List<WifiConfiguration> configurations = main.wifi.getConfiguredNetworks();
         final WifiConfiguration configuration = new WifiConfiguration();
         String currentSSID = null;
-        boolean isWifi;
+        final boolean isWifi;
+
         //endregion
 
         main.firstmassege.setVisibility(View.INVISIBLE);
@@ -57,6 +58,15 @@ public class WifiScaner extends BroadcastReceiver {
         WifiInfo currentWifi = main.wifi.getConnectionInfo();
         if (isWifi == true)
             currentSSID = currentWifi.getSSID();
+        final String finalCurrentSSID = currentSSID;
+        main.current.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                main.current.setText(finalCurrentSSID);
+            }
+        });
+
+
         //region puts all scan result into an array and show on listview
         for ( int i = 0; i < results.size(); i++) {
             wifi_names[i] = results.get(i).SSID + "\n" + results.get(i).BSSID.toString() + "\n" + results.get(i).level
@@ -76,6 +86,7 @@ public class WifiScaner extends BroadcastReceiver {
 
 
         //region this method is when clicking some wifi from the list
+        final String finalCurrentSSID1 = currentSSID;
         main.wifi_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -96,24 +107,28 @@ public class WifiScaner extends BroadcastReceiver {
                     public void onClick(DialogInterface dialog, int which) {
 
                         password = input.getText().toString();
-                        configuration.SSID = "\"" + ssid + "\"";
-
-                        //region check wifi security type
-                        String Capabilities = results.get(position).capabilities;
-                        if (Capabilities.contains("WPA")) {
+                        //region check wifi security type and connecting
+                        String cap = results.get(position).capabilities;
+                        if (cap.contains("WPA")) {
                             builder.setMessage("WPA");
                             configuration.preSharedKey = "\"" + password + "\"";
-                        }
-                        else if (Capabilities.contains("WEP")) {
+                        } else if (cap.contains("WEP")) {
                             builder.setMessage("WEP");
+                            configuration.SSID = "\"" + ssid + "\"";
                             configuration.wepKeys[0] = "\"" + password + "\"";
                             configuration.wepTxKeyIndex = 0;
                             configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
                             configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
-                        }
-                        else {
-                            builder.setMessage("NONE ");
+                            int res = main.wifi.addNetwork(configuration);
+                            boolean b = main.wifi.enableNetwork(res, true);
+                            main.wifi.setWifiEnabled(true);
+                        } else {
+                            builder.setMessage("OPEN ");
+                            configuration.SSID = "\"" + ssid + "\"";
                             configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+                            int res = main.wifi.addNetwork(configuration);
+                            boolean b = main.wifi.enableNetwork(res, true);
+                            main.wifi.setWifiEnabled(true);
                         }
                         //endregion
 
@@ -132,7 +147,10 @@ public class WifiScaner extends BroadcastReceiver {
                     }
                 });
                 //endregion
-
+                if (main.isconnected.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting()) {
+                    main.connectText.setText("Connect!");
+                    main.current.setText(finalCurrentSSID1);
+                }
                 //region build the cancel button
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override

@@ -3,7 +3,6 @@ package com.example.amit.wifi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
-
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,8 +14,6 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import java.util.List;
 
 
@@ -32,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button strongest;
     TextView firstmassege;
     ConnectivityManager isconnected;
+    Button current;
+    TextView connectText;
     //endregion
 
     @Override
@@ -48,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         firstmassege = (TextView) findViewById(R.id.firstmassage);
         final Switch wifiSwich = (Switch) findViewById(R.id.wifibutton);
         isconnected = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        current = (Button) findViewById(R.id.currentbutton);
+        connectText = (TextView) findViewById(R.id.connectText);
 
         //endregion
 
@@ -55,13 +56,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         scan.setOnClickListener(this);
         wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         info = wifi.getConnectionInfo();
-
         text.append("\n\n wifi :" + info.toString());
         List<WifiConfiguration> configurations = wifi.getConfiguredNetworks();
         for (WifiConfiguration configuration : configurations) {
             text.append("\n\n" + configuration.toString());
         }
         //endregion
+
+        if(isconnected.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting())
+            connectText.setText("Connect!");
 
         //region  WIFI SWITCH
         if(wifi.isWifiEnabled() == true)
