@@ -5,13 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.text.InputType;
-import android.net.ConnectivityManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -108,11 +106,23 @@ public class WifiScaner extends BroadcastReceiver {
 
                         password = input.getText().toString();
                         //region check wifi security type and connecting
-                        String cap = results.get(position).capabilities;
-                        if (cap.contains("WPA")) {
+                        String security = getScanResultSecurity(results.get(position));
+
+                        if (security.equalsIgnoreCase("WPA")) {
                             builder.setMessage("WPA");
-                            configuration.preSharedKey = "\"" + password + "\"";
-                        } else if (cap.contains("WEP")) {
+                            configuration.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+                            configuration.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+                            configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+                            configuration.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+                            configuration.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+                            configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+                            configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
+                            configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+                            configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+                            configuration.preSharedKey = "\"".concat(password).concat("\"");
+                        }
+
+                        else if (security.equalsIgnoreCase("WEP")) {
                             builder.setMessage("WEP");
                             configuration.SSID = "\"" + ssid + "\"";
                             configuration.wepKeys[0] = "\"" + password + "\"";
@@ -122,7 +132,9 @@ public class WifiScaner extends BroadcastReceiver {
                             int res = main.wifi.addNetwork(configuration);
                             boolean b = main.wifi.enableNetwork(res, true);
                             main.wifi.setWifiEnabled(true);
-                        } else {
+                        }
+
+                        else if(security.equalsIgnoreCase("OPEN")) {
                             builder.setMessage("OPEN ");
                             configuration.SSID = "\"" + ssid + "\"";
                             configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
@@ -133,16 +145,10 @@ public class WifiScaner extends BroadcastReceiver {
                         //endregion
 
                         //region connect to the wifi
-                        main.wifi.addNetwork(configuration);
+                        int networkID = main.wifi.addNetwork(configuration);
+                        if(networkID!= -1)
+                            main.wifi.enableNetwork(networkID,true);
 
-                        for (WifiConfiguration configuration1 : configurations) {
-                            if (configuration1.SSID != null && configuration1.SSID.equals("\"" + ssid + "\"")) {
-                                main.wifi.disconnect();
-                                main.wifi.enableNetwork(configuration1.networkId, true);
-                                main.wifi.reconnect();
-                                break;
-                            }
-                        }
                         //endregion
                     }
                 });
@@ -180,4 +186,17 @@ public class WifiScaner extends BroadcastReceiver {
         );
         //endregion
         }
+    public String getScanResultSecurity(ScanResult scanResult) {
+
+
+        final String cap = scanResult.capabilities;
+        final String[] securityModes = {"WEP", "PSK", "EAP"};
+
+        for (int i = securityModes.length - 1; i >= 0; i--) {
+            if (cap.contains(securityModes[i])) {
+                return securityModes[i];
+            }
+        }
+        return "OPEN";
+    }
 }

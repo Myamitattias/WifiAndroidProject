@@ -108,4 +108,13 @@
         android:layout_toLeftOf="@+id/buttonScan"
         android:layout_toStartOf="@+id/buttonScan" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="setting"
+        android:id="@+id/settingbutton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/Wifi_listview"
+        android:layout_alignEnd="@+id/Wifi_listview" />
+
 </RelativeLayout>

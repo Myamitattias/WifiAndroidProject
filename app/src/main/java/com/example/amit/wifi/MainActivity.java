@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ConnectivityManager isconnected;
     Button current;
     TextView connectText;
+    Button settingbutton;
     //endregion
 
     @Override
@@ -49,8 +50,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         isconnected = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         current = (Button) findViewById(R.id.currentbutton);
         connectText = (TextView) findViewById(R.id.connectText);
-
+        settingbutton = (Button) findViewById(R.id.settingbutton);
         //endregion
+
+        settingbutton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setContentView(R.layout.activity_setting);
+                    }
+                }
+        );
 
         //region set the wifi service , get connection info and configurations
         scan.setOnClickListener(this);
